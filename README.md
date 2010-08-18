@@ -18,7 +18,7 @@ The .NET API has been subdivided into two external layers all contained in the `
 
 The constructors of all service interfaces take a single parameter, a reference to an IAPIProvider interface implementation. The IAPIProvider interface describes the communications between the 23 API and the service layer. Therefore you have to instantiate an implemenetation of the interface (default implementation is APIProvider) before being able to do any requests to your services.
 
-Furthermore most methods for listing a series of objects can be overloaded with a ListParameter object, which must be instantied and changed in order to do a certain request. Please refer to "Sample: Get a list of videos" for an explanation.
+Furthermore most methods for listing a series of objects can be overloaded with a ListParameter object, which must be instantied and changed in order to do a certain request. Please refer to "Sample: Get a list of photos and videos" for an explanation.
 
 The domain layer contains domain objects, ie. pure content holders without any functionality, describing different aspects of the method return data. The following domain objects exist, which are returned by some service methods:
 
@@ -29,6 +29,8 @@ The domain layer contains domain objects, ie. pure content holders without any f
 * Site (Twentythree.Domain.Site)
 * Tag (Twentythree.Domain.Tag)
 * User (Twentythree.Domain.User)
+
+If a method returns a domain object or a list of these, a failed operation will return a `null' object.
 
 # Setting up the API
 
@@ -42,3 +44,34 @@ Runtime authentication asks for authentication approval when a request is sent. 
 
 For most uses however, the fully configured authentication for a specific site is the way to go, as this allows you to control every aspect of the API, whereas runtime authenticated API requests are subject to access restrictions as per the 23 API documentation.
 
+# Sample: get a list of photos and videos
+
+To get a list of photos by the default API parameters, simple make sure you have your API provider instantiated, and execute the following code:
+
+    IPhotoService _PhotoService = new PhotoService(ServiceProvider);
+    List<Domain.Photo> Photos = _PhotoService.GetList();
+
+    if (Photos == null) return; // Handle error
+
+    foreach (Domain.Photo _Photo in Photos)
+    {
+        // Execute whatever code here...
+    }
+
+Where this may be sufficient for some cases, most of the time you're going to need to specify some request parameters, which is done by a ListParameters object. For photos this object is called `PhotoListParameters', the properties of which can be found by viewing the library source. All parameters are at creation set to the request default, so you only need to change the necessary parameters. If we want to request video objects only, the following request is needed:
+
+    IPhotoService _PhotoService = new PhotoService(ServiceProvider);
+    PhotoListParameters ListParameters = new PhotoListParameters()
+    {
+        Video = true
+    }
+    List<Domain.Photo> Photos = _PhotoService.GetList(ListParameters);
+
+    if (Photos == null) return; // Handle error
+
+    foreach (Domain.Photo _Photo in Photos)
+    {
+        // Execute whatever code here...
+    }
+
+The methodology can be replicated on to any service, that allows you to get an object list.
