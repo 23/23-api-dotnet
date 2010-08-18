@@ -64,7 +64,7 @@ Where this may be sufficient for some cases, most of the time you're going to ne
     PhotoListParameters ListParameters = new PhotoListParameters()
     {
         Video = true
-    }
+    };
     List<Domain.Photo> Photos = _PhotoService.GetList(ListParameters);
 
     if (Photos == null) return; // Handle error
@@ -75,3 +75,26 @@ Where this may be sufficient for some cases, most of the time you're going to ne
     }
 
 The methodology can be replicated on to any service, that allows you to get an object list.
+
+# Sample: create a user
+
+To create a user, you simply need to instantiate an `IUserService' interface and use the `Create' method with the overload that describes the parameters, you have available. In this sample, it is expected that all parameters are available, in any other case you must supply a null value. The method returns an integer value representing the user id of the created user, or null if it fails.
+
+    IPhotoService _UserService = new UserService(ServiceProvider);
+    int? NewUserId = _UserService.Create(
+        "email@address.tld", // The e-mail address of the user
+        "username", // The username of the user. Must be at least 4 characters
+        "secret", // The password of the user
+        "Ernest Johanson", // The full name of the user
+        Timezone.CET, // The timezone of the user. Refer to the library implementation of the Timezone enumerator for possible values
+        false // We don't want this user to be a site administrator
+    );
+
+    if (NewUserId == null)
+    {
+        // We failed somehow...
+    }
+    else
+    {
+        // Do whatever is necessary to NewUserId
+    }
