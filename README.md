@@ -6,7 +6,7 @@ The implementation relies fully on [DotNetOpenAuth](http://www.dotnetopenauth.ne
 
 # Interfaces and objects
 
-The .NET API has been subdivided into two external layers all contained in the `Twentythree' namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
+The .NET API has been subdivided into two external layers all contained in the `Twentythree´ namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
 
 * IAlbumService (default implementation: Twentythree.AlbumService)
 * ICommentService (default implementation: Twentythree.CommentService)
