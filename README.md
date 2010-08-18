@@ -6,7 +6,7 @@ The implementation relies fully on [DotNetOpenAuth](http://www.dotnetopenauth.ne
 
 # Interfaces and objects
 
-The .NET API has been subdivided into two external layers all contained in the `Twentythree´ namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
+The .NET API has been subdivided into two external layers all contained in the `Twentythree` namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
 
 * IAlbumService (default implementation: Twentythree.AlbumService)
 * ICommentService (default implementation: Twentythree.CommentService)
@@ -30,7 +30,7 @@ The domain layer contains domain objects, ie. pure content holders without any f
 * Tag (Twentythree.Domain.Tag)
 * User (Twentythree.Domain.User)
 
-If a method returns a domain object or a list of these, a failed operation will return a `null' object.
+If a method returns a domain object or a list of these, a failed operation will return a `null`.
 
 # Setting up the API
 
@@ -58,7 +58,7 @@ To get a list of photos by the default API parameters, simple make sure you have
         // Execute whatever code here...
     }
 
-Where this may be sufficient for some cases, most of the time you're going to need to specify some request parameters, which is done by a ListParameters object. For photos this object is called `PhotoListParameters', the properties of which can be found by viewing the library source. All parameters are at creation set to the request default, so you only need to change the necessary parameters. If we want to request video objects only, the following request is needed:
+Where this may be sufficient for some cases, most of the time you're going to need to specify some request parameters, which is done by a ListParameters object. For photos this object is called `PhotoListParameters`, the properties of which can be found by viewing the library source. All parameters are at creation set to the request default, so you only need to change the necessary parameters. If we want to request video objects only, the following request is needed:
 
     IPhotoService _PhotoService = new PhotoService(ServiceProvider);
     PhotoListParameters ListParameters = new PhotoListParameters()
@@ -78,7 +78,7 @@ The methodology can be replicated on to any service, that allows you to get an o
 
 # Sample: create a user
 
-To create a user, you simply need to instantiate an `IUserService' interface and use the `Create' method with the overload that describes the parameters, you have available. In this sample, it is expected that all parameters are available, in any other case you must supply a null value. The method returns an integer value representing the user id of the created user, or null if it fails.
+To create a user, you simply need to instantiate an `IUserService` interface and use the `Create` method with the overload that describes the parameters, you have available. In this sample, it is expected that all parameters are available, in any other case you must supply a null value. The method returns an integer value representing the user id of the created user, or null if it fails.
 
     IPhotoService _UserService = new UserService(ServiceProvider);
     int? NewUserId = _UserService.Create(
