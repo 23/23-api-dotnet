@@ -6,15 +6,15 @@ The implementation relies fully on [DotNetOpenAuth](http://www.dotnetopenauth.ne
 
 # Interfaces and objects
 
-The .NET API has been subdivided into two external layers all contained in the `Twentythree` namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
+The .NET API has been subdivided into two external layers all contained in the `Visual` namespace; a service layer and a domain layer. The service layer provides service interfaces for retrieving and pushing data to the specific site through a series of methods. The following service layer interfaces exist:
 
-* IAlbumService (default implementation: Twentythree.AlbumService)
-* ICommentService (default implementation: Twentythree.CommentService)
-* IPhotoService (default implementation: Twentythree.PhotoService)
-* ISessionService (default implementation: Twentythree.SessionService)
-* ISiteService (default implementation: Twentythree.SiteService)
-* ITagService (default implementation: Twentythree.TagService)
-* IUserService (default implementation: Twentythree.UserService)
+* IAlbumService (default implementation: Visual.AlbumService)
+* ICommentService (default implementation: Visual.CommentService)
+* IPhotoService (default implementation: Visual.PhotoService)
+* ISessionService (default implementation: Visual.SessionService)
+* ISiteService (default implementation: Visual.SiteService)
+* ITagService (default implementation: Visual.TagService)
+* IUserService (default implementation: Visual.UserService)
 
 The constructors of all service interfaces take a single parameter, a reference to an IAPIProvider interface implementation. The IAPIProvider interface describes the communications between the 23 API and the service layer. Therefore you have to instantiate an implemenetation of the interface (default implementation is APIProvider) before being able to do any requests to your services.
 
@@ -22,13 +22,13 @@ Furthermore most methods for listing a series of objects can be overloaded with 
 
 The domain layer contains domain objects, ie. pure content holders without any functionality, describing different aspects of the method return data. The following domain objects exist, which are returned by some service methods:
 
-* Album (Twentythree.Domain.Album)
-* Comment (Twentythree.Domain.Comment)
-* Photo (Twentythree.Domain.Photo)
-* Session (Twentythree.Domain.Session)
-* Site (Twentythree.Domain.Site)
-* Tag (Twentythree.Domain.Tag)
-* User (Twentythree.Domain.User)
+* Album (Visual.Domain.Album)
+* Comment (Visual.Domain.Comment)
+* Photo (Visual.Domain.Photo)
+* Session (Visual.Domain.Session)
+* Site (Visual.Domain.Site)
+* Tag (Visual.Domain.Tag)
+* User (Visual.Domain.User)
 
 If a method returns a domain object or a list of these, a failed operation will return a `null`.
 
