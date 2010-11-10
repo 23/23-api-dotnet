@@ -1,4 +1,4 @@
-﻿namespace Twentythree
+﻿namespace Visual
 {
     public enum AlbumListSort
     {

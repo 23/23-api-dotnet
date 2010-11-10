@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-namespace Twentythree
+namespace Visual
 {
     public enum PhotoListSort
     {
@@ -53,7 +53,7 @@ namespace Twentythree
         public bool? Audio = null;
 
         public bool? VideoEncoded = null;
-        public bool IncludeUnpublised = false;
+        public bool IncludeUnpublished = false;
 
         public PhotoListSort OrderBy = PhotoListSort.Published;
         public GenericSort Order = GenericSort.Descending;

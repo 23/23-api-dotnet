@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Twentythree
+namespace Visual
 {
 #region Enumeration helpers
     public class RequestValue : Attribute
