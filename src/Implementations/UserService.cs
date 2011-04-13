@@ -133,5 +133,50 @@ namespace Visual
             // If nothing pops up, we'll return null
             return null;
         }
+		
+		public Domain.Session GetLoginToken(string userId)
+		{
+			return GetLoginToken(userId, "/");
+		}
+		
+		public Domain.Session GetLoginToken(string userId, string returnUrl)
+        {
+            // Build request URL
+            List<string> requestUrlParameters = new List<string>();
+			
+			requestUrlParameters.Add("user_id=" + HttpUtility.UrlEncode(userId));
+            requestUrlParameters.Add("return_url=" + HttpUtility.UrlEncode(returnUrl));
+
+            // Do the request
+            MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/user/get-login-token", requestUrlParameters), HttpDeliveryMethods.GetRequest);
+
+            XPathNavigator responseMessage = _provider.DoRequest(requestMessage);
+            if (responseMessage == null) return null;
+
+            // Create result
+            Domain.Session result = new Domain.Session();
+
+            // Get the access token
+            XPathNodeIterator accessTokenNode = responseMessage.Select("/response/login_token");
+            if ((!accessTokenNode.MoveNext()) || (accessTokenNode.Current == null)) return null;
+
+            result.AccessToken = accessTokenNode.Current.Value;
+
+            // Get the local return URL
+            XPathNodeIterator returnUrlNode = responseMessage.Select("/response/return_url");
+            if ((!returnUrlNode.MoveNext()) || (returnUrlNode.Current == null)) return null;
+
+            string localReturnUrl = returnUrlNode.Current.Value;
+
+            // Build the return URL
+            List<string> returnUrlParameters = new List<string>();
+
+            returnUrlParameters.Add("login_token=" + result.AccessToken);
+
+            result.ReturnURL = _provider.GetRequestUrl("/api/user/redeem-login-token", returnUrlParameters);
+
+            // Return the object
+            return result;
+        }
     }
 }

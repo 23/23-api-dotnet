@@ -13,5 +13,7 @@ namespace Visual
         int? Create(string email, string username, string password, string fullName);
         int? Create(string email, string username, string password, string fullName, Timezone timezone);
         int? Create(string email, string username, string password, string fullName, Timezone timezone, bool siteAdmin);
+		Domain.Session GetLoginToken(string userId);
+        Domain.Session GetLoginToken(string userId, string returnUrl);
     }
 }
