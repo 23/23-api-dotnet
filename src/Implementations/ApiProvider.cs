@@ -18,6 +18,7 @@ namespace Visual
         private WebConsumer _oAuthConsumer;
         private ServiceProviderDescription _oAuthProviderDescription = new ServiceProviderDescription();
         private InMemoryTokenManager _oAuthTokenManager;
+        private WebProxy _proxy;
 
         // * Variables
         private string _consumerDomain;
@@ -96,6 +97,8 @@ namespace Visual
             }
 
             HttpWebRequest request = (parameters == null ? _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken) : _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken, parameters));
+            if (_proxy != null)
+                request.Proxy = _proxy;
             IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
 
             XDocument responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseReader()));
@@ -122,6 +125,13 @@ namespace Visual
         public string GetRequestUrl(string method, List<string> parameters)
         {
             return "http://" + _consumerDomain + method + (parameters != null ? (parameters.Count > 0 ? "?" + String.Join("&", parameters.ToArray()) : "") : "");
+        }
+
+        public void SetProxy(string uri, string username = null, string password = null, string domain = null)
+        {
+            _proxy = new WebProxy(new Uri(uri));
+            if ((!string.IsNullOrEmpty(username)) || (!string.IsNullOrEmpty(password)))
+                _proxy.Credentials = !string.IsNullOrEmpty(domain) ? new NetworkCredential(username, password, domain) : new NetworkCredential(username, password);
         }
     }
 }
