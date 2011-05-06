@@ -355,13 +355,17 @@ namespace Visual
             // Build request URL
             List<string> requestUrlParameters = new List<string>();
 
+            // Ensure that only relative filenames are sent
+            int relativeFilenameSplit = filename.LastIndexOf('\\');
+            string relativeFilename = (relativeFilenameSplit == -1 ? filename : filename.Substring(relativeFilenameSplit + 1));
+
             // Do the request
             MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/photo/replace", requestUrlParameters), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest);
 
             List<MultipartPostPart> data = new List<MultipartPostPart>
             {
                 MultipartPostPart.CreateFormPart("photo_id", photoId.ToString()),
-                MultipartPostPart.CreateFormFilePart("file", filename, fileContentType, filestream)
+                MultipartPostPart.CreateFormFilePart("file", relativeFilename, fileContentType, filestream)
             };
 
             XPathNavigator responseMessage = _provider.DoRequest(requestMessage, data);
