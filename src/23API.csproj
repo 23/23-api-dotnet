@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Player.cs" />
+    <Compile Include="Implementations\PlayerService.cs" />
+    <Compile Include="Interfaces\IPlayerService.cs" />
     <Compile Include="Interfaces\ICommentService.cs" />
     <Compile Include="Implementations\ApiProvider.cs" />
     <Compile Include="Interfaces\IApiProvider.cs" />
