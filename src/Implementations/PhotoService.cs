@@ -70,10 +70,14 @@ namespace Visual
 
             if (requestParameters.Tags.Count > 0)
             {
+                string tagString = "";
+
                 foreach (string tag in requestParameters.Tags)
                 {
-                    requestUrlParameters.Add("tag=" + HttpUtility.UrlEncode(tag));
+                    tagString += (String.IsNullOrEmpty(tagString) ? "" : " ") + (((tag.Contains(" ")) && (tag[0] != '"')) ? "\"" + tag + "\"" : tag);
                 }
+
+                requestUrlParameters.Add("tags=" + HttpUtility.UrlEncode(tagString));
             }
             if (requestParameters.TagMode != PhotoTagMode.And) requestUrlParameters.Add("tag_mode=" + RequestValues.Get(requestParameters.TagMode));
 

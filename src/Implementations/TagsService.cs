@@ -35,8 +35,8 @@ namespace Visual
 
             if (requestParameters.Search != null) requestUrlParameters.Add("search=" + HttpUtility.UrlEncode(requestParameters.Search));
 
-            if (requestParameters.ReformatTags) requestUrlParameters.Add("reformat_tags_p=1");
-            if (requestParameters.ExcludeMachineTags) requestUrlParameters.Add("exclude_machine_tags_p=1");
+            requestUrlParameters.Add("reformat_tags_p=" + (requestParameters.ReformatTags ? 1 : 0));
+            requestUrlParameters.Add("exclude_machine_tags_p=" + (requestParameters.ExcludeMachineTags ? 1 : 0));
 
             if (requestParameters.OrderBy != TagListSort.Tag) requestUrlParameters.Add("orderby=" + RequestValues.Get(requestParameters.OrderBy));
             if (requestParameters.Order != GenericSort.Descending) requestUrlParameters.Add("order=" + RequestValues.Get(requestParameters.Order));
