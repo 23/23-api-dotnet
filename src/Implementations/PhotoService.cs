@@ -16,16 +16,7 @@ namespace Visual
         }
 
         // * Get a single photo
-        /// <summary>
-        /// Returns a single photo object defined by the photo ID. Only includes published photos
-        /// </summary>
-        public Domain.Photo Get(int photoId) { return Get(photoId, false); }
-
-        // * Get a single photo
-        /// <summary>
-        /// Returns a single photo object defined by the photo ID defined by inclusion of unpublished photos
-        /// </summary>
-        public Domain.Photo Get(int photoId, bool includeUnpublished)
+        public Domain.Photo Get(int photoId, bool includeUnpublished = false)
         {
             // Get a list of photos
             List<Domain.Photo> photoList = GetList(new PhotoListParameters
@@ -271,20 +262,7 @@ namespace Visual
 
         // * Upload photo
         // Implements http://www.23developer.com/api/photo-upload
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream) { return Upload(filename, fileContentType, filestream, null, null, null, null, null, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId) { return Upload(filename, fileContentType, filestream, userId, null, null, null, null, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId, int? albumId) { return Upload(filename, fileContentType, filestream, userId, albumId, null, null, null, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId, int? albumId, string title) { return Upload(filename, fileContentType, filestream, userId, albumId, title, null, null, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId, int? albumId, string title, string description) { return Upload(filename, fileContentType, filestream, userId, albumId, title, description, null, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId, int? albumId, string title, string description, string tags) { return Upload(filename, fileContentType, filestream, userId, albumId, title, description, tags, null); }
-        /// <summary>Upload a photo</summary>
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId, int? albumId, string title, string description, string tags, bool? publish)
+        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null)
         {
             // Verify required parameters
             if (filestream == null) return null;
@@ -378,15 +356,7 @@ namespace Visual
         // * Update photo
         // Implements
         /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId) { return Update(photoId, albumId, null, null, null, null); }
-        /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId, string title) { return Update(photoId, albumId, title, null, null, null); }
-        /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId, string title, string description) { return Update(photoId, albumId, title, description, null, null); }
-        /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId, string title, string description, string tags) { return Update(photoId, albumId, title, description, tags, null); }
-        /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId, string title, string description, string tags, bool? published)
+        public bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null)
         {
             // Build request URL
             List<MultipartPostPart> data = new List<MultipartPostPart>

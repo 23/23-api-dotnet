@@ -114,15 +114,7 @@ namespace Visual
 
         // * Create album
         // Implements http://www.23developer.com/api/album-create
-        /// <summary>Create an album with a specified title - returns album id or null</summary>
-        public int? Create(string title) { return Create(title, "", false, null); }
-        /// <summary>Create an album with a specified title and description - returns album id or null</summary>
-        public int? Create(string title, string description) { return Create(title, description, false, null); }
-        /// <summary>Create an album with a specified title, description and hiding - returns album id or null</summary>
-        public int? Create(string title, string description, bool hide) { return Create(title, description, hide, null); }
-
-        /// <summary>Create an album with a specified title, description, hiding and creator user id - returns album id or null</summary>
-        public int? Create(string title, string description, bool hide, int? userId)
+        public int? Create(string title, string description = "", bool hide = false, int? userId = null)
         {
             // Verify required parameters
             if (String.IsNullOrEmpty(title)) return null;
@@ -151,13 +143,7 @@ namespace Visual
 
         // * Update album
         // Implements http://www.23developer.com/api/album-update
-        /// <summary>Update an album given an id with a specified title</summary>
-        public bool Update(int albumId, string title) { return Update(albumId, title, "", false); }
-        /// <summary>Update an album given an id with a specified title and description</summary>
-        public bool Update(int albumId, string title, string description) { return Update(albumId, title, description, false); }
-
-        /// <summary>Update an album given an id with a specified title, description and hiding</summary>
-        public bool Update(int albumId, string title, string description, bool hide)
+        public bool Update(int albumId, string title, string description = "", bool hide = false)
         {
             // Verify required parameters
             if (String.IsNullOrEmpty(title)) return false;

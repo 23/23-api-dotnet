@@ -29,6 +29,17 @@ namespace Visual
         private string _accessTokenSecret;
 
         // * Constructor
+		/// <summary>
+		/// Creates a 23 API service repository, that relies only on public access to the API
+		/// </summary>
+		/// <param name="consumerDomain">
+		/// Domain name
+		/// </param>
+		public ApiProvider(string consumerDomain)
+		{
+			_consumerDomain = consumerDomain;
+		}
+		
         /// <summary>
         /// Creates a 23 API service repository, that requires further authentication approval.
         /// When using this constructor, you should consider rewriting the token manager (InMemoryTokenManager) to let your application handle access tokens
@@ -88,20 +99,49 @@ namespace Visual
 
         public XPathNavigator DoRequest(MessageReceivingEndpoint message, List<MultipartPostPart> parameters)
         {
-            // Verify authentication
-            if (_accessToken == null)
-            {
-                AuthorizedTokenResponse accessTokenResponse = _oAuthConsumer.ProcessUserAuthorization();
-                if (accessTokenResponse != null) _accessToken = accessTokenResponse.AccessToken;
-                else if (_accessToken == null) _oAuthConsumer.Channel.Send(_oAuthConsumer.PrepareRequestUserAuthorization());
-            }
+			// Initialize the response XML document
+			XDocument responseDocument = null;
+			
+			// Perform the request based on the authentication
+			if (_oAuthConsumer == null)
+			{
+				// Multipart requests are only available to authenticated API accesses at the moment
+				if (parameters != null)
+					throw new NotImplementedException();
+				
+				// Construct the request
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(message.Location);
+				
+				if ((message.AllowedMethods & HttpDeliveryMethods.PostRequest) == HttpDeliveryMethods.PostRequest)
+					request.Method = "POST";
 
-            HttpWebRequest request = (parameters == null ? _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken) : _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken, parameters));
-            if (_proxy != null)
-                request.Proxy = _proxy;
-            IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
-
-            XDocument responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseReader()));
+				if (_proxy != null)
+	                request.Proxy = _proxy;
+				
+				// Get and parse the response
+				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+				
+				responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseStream(), new XmlReaderSettings()));
+			}
+			else
+			{
+	            // Verify authentication
+	            if (_accessToken == null)
+	            {
+	                AuthorizedTokenResponse accessTokenResponse = _oAuthConsumer.ProcessUserAuthorization();
+	                if (accessTokenResponse != null) _accessToken = accessTokenResponse.AccessToken;
+	                else if (_accessToken == null) _oAuthConsumer.Channel.Send(_oAuthConsumer.PrepareRequestUserAuthorization());
+	            }
+	
+				// Construct the request
+	            HttpWebRequest request = (parameters == null ? _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken) : _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken, parameters));
+	            if (_proxy != null)
+	                request.Proxy = _proxy;
+	            IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
+	
+				// Parse the response
+	            responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseReader()));
+			}
 
             // Establish navigator and validate response
             XPathNavigator responseNavigation = responseDocument.CreateNavigator();

@@ -94,18 +94,8 @@ namespace Visual
 
         // * Create user
         // Implements http://www.23developer.com/api/user-create
-        /// <summary>Create a user specified by an e-mail address</summary>
-        public int? Create(string email) { return Create(email, null, null, null, Timezone.CET, false); }
-        /// <summary>Create a user specified by an e-mail address and username</summary>
-        public int? Create(string email, string username) { return Create(email, username, null, null, Timezone.CET, false); }
-        /// <summary>Create a user specified by an e-mail address, username and password</summary>
-        public int? Create(string email, string username, string password) { return Create(email, username, password, null, Timezone.CET, false); }
-        /// <summary>Create a user specified by an e-mail address, username, password and full name</summary>
-        public int? Create(string email, string username, string password, string fullName) { return Create(email, username, password, fullName, Timezone.CET, false); }
-        /// <summary>Create a user specified by an e-mail address, username, password, full name and timezone</summary>
-        public int? Create(string email, string username, string password, string fullName, Timezone timezone) { return Create(email, username, password, fullName, timezone, false); }
         /// <summary>Create a user specified by an e-mail address, username, password, full name, timezone and site admin rigts specification</summary>
-        public int? Create(string email, string username, string password, string fullName, Timezone timezone, bool siteAdmin)
+        public int? Create(string email, string username = null, string password = null, string fullName = null, Timezone timezone = Timezone.CET, bool siteAdmin = false)
         {
             // Verify required parameters
             if (String.IsNullOrEmpty(email)) return null;
@@ -134,17 +124,12 @@ namespace Visual
             return null;
         }
 		
-		public Domain.Session GetLoginToken(string userId)
-		{
-			return GetLoginToken(userId, "/");
-		}
-		
-		public Domain.Session GetLoginToken(string userId, string returnUrl)
+		public Domain.Session GetLoginToken(int userId, string returnUrl = "/")
         {
             // Build request URL
             List<string> requestUrlParameters = new List<string>();
 			
-			requestUrlParameters.Add("user_id=" + HttpUtility.UrlEncode(userId));
+			requestUrlParameters.Add("user_id=" + HttpUtility.UrlEncode(userId.ToString()));
             requestUrlParameters.Add("return_url=" + HttpUtility.UrlEncode(returnUrl));
 
             // Do the request

@@ -14,21 +14,7 @@ namespace Visual
             _provider = provider;
         }
 
-        /// <summary>
-        /// Returns a Session object containing a signed token and a URL for redeeming with the default relative path (/)
-        /// </summary>
-        /// <returns></returns>
-        public Domain.Session GetToken()
-        {
-            return GetToken("/");
-        }
-
-        /// <summary>
-        /// Returns a Session object containing a signed token and a URL for redeeming with a specific relative or absulte path
-        /// </summary>
-        /// <param name="returnUrl">Specific (http://example.23video.com/...) or relative path (/...) on site</param>
-        /// <returns></returns>
-        public Domain.Session GetToken(string returnUrl)
+        public Domain.Session GetToken(string returnUrl = "/")
         {
             // Build request URL
             List<string> requestUrlParameters = new List<string>();
