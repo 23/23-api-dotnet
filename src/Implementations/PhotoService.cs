@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Xml.XPath;
+using System.Linq;
 using DotNetOpenAuth.Messaging;
 
 namespace Visual
@@ -9,6 +10,131 @@ namespace Visual
     public class PhotoService : IPhotoService
     {
         private IApiProvider _provider;
+        private static string[] _defaultAttributes = {
+            "photo_id",
+"title",
+"tree_id",
+"token",
+"album_id",
+"album_title",
+"all_albums",
+"published_p",
+"one",
+"publish_date_ansi",
+"publish_date__date",
+"publish_date__time",
+"creation_date_ansi",
+"creation_date__date",
+"creation_date__time",
+"original_date_ansi",
+"original_date__date",
+"original_date__time",
+"view_count",
+"avg_playtime",
+"number_of_comments",
+"number_of_albums",
+"number_of_tags",
+"photo_rating",
+"number_of_ratings",
+"video_p",
+"video_encoded_p",
+"audio_p",
+"video_length",
+"text_only_p",
+"user_id",
+"username",
+"display_name",
+"user_url",
+"subtitles_p",
+"sections_p",
+"license_id",
+"coordinates",
+"absolute_url",
+"original_width",
+"original_height",
+"original_size",
+"original_download",
+"quad16_width",
+"quad16_height",
+"quad16_size",
+"quad16_download",
+"quad50_width",
+"quad50_height",
+"quad50_size",
+"quad50_download",
+"quad75_width",
+"quad75_height",
+"quad75_size",
+"quad75_download",
+"quad100_width",
+"quad100_height",
+"quad100_size",
+"quad100_download",
+"small_width",
+"small_height",
+"small_size",
+"small_download",
+"medium_width",
+"medium_height",
+"medium_size",
+"medium_download",
+"portrait_width",
+"portrait_height",
+"portrait_size",
+"portrait_download",
+"standard_width",
+"standard_height",
+"standard_size",
+"standard_download",
+"large_width",
+"large_height",
+"large_size",
+"large_download",
+"video_medium_width",
+"video_medium_height",
+"video_medium_size",
+"video_medium_download",
+"video_hd_width",
+"video_hd_height",
+"video_hd_size",
+"video_hd_download",
+"video_1080p_width",
+"video_1080p_height",
+"video_1080p_size",
+"video_1080p_download",
+"video_webm_360p_width",
+"video_webm_360p_height",
+"video_webm_360p_size",
+"video_webm_360p_download",
+"video_webm_720p_width",
+"video_webm_720p_height",
+"video_webm_720p_size",
+"video_webm_720p_download",
+"video_wmv_width",
+"video_wmv_height",
+"video_wmv_size",
+"video_wmv_download",
+"video_mobile_h263_amr_width",
+"video_mobile_h263_amr_height",
+"video_mobile_h263_amr_size",
+"video_mobile_h263_amr_download",
+"video_mobile_h263_aac_width",
+"video_mobile_h263_aac_height",
+"video_mobile_h263_aac_size",
+"video_mobile_h263_aac_download",
+"video_mobile_mpeg4_amr_width",
+"video_mobile_mpeg4_amr_height",
+"video_mobile_mpeg4_amr_size",
+"video_mobile_mpeg4_amr_download",
+"video_mobile_high_width",
+"video_mobile_high_height",
+"video_mobile_high_size",
+"video_mobile_high_download",
+"audio_width",
+"audio_height",
+"audio_size",
+"audio_download"
+        };
 
         public PhotoService(IApiProvider provider)
         {
@@ -255,8 +381,25 @@ namespace Visual
 
                     AfterText = Helpers.GetNodeChildValue(photos.Current, "after_text"),
 
-                    Tags = new List<string>(Helpers.GetNodeChildValue(photos.Current, "tags").Split(','))
+                    Tags = new List<string>(Helpers.GetNodeChildValue(photos.Current, "tags").Split(',')),
+                    Variables = new Dictionary<string, string>()
                 };
+
+                // Read out custom variables.
+                XPathNavigator variableNavigator = photos.Current.Clone();
+                if (variableNavigator.MoveToFirstAttribute())
+                {
+                    if (!_defaultAttributes.Contains(variableNavigator.Name))
+                        photoModel.Variables.Add(variableNavigator.Name,
+                                                 variableNavigator.Value);
+
+                    while (variableNavigator.MoveToNextAttribute())
+                    {
+                        if (!_defaultAttributes.Contains(variableNavigator.Name))
+                            photoModel.Variables.Add(variableNavigator.Name,
+                                                     variableNavigator.Value);
+                    }
+                }
 
                 result.Add(photoModel);
             }

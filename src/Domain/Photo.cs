@@ -114,5 +114,6 @@ namespace Visual.Domain
         public string AfterText;
 
         public List<string> Tags;
+        public Dictionary<string, string> Variables;
     }
 }
