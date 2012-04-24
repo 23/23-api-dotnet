@@ -112,6 +112,8 @@ namespace Visual.Domain
         public string AfterDownloadURL;
 
         public string AfterText;
+        
+        public string AbsoluteUrl;
 
         public List<string> Tags;
         public Dictionary<string, string> Variables;
