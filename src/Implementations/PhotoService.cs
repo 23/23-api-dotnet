@@ -380,7 +380,7 @@ namespace Visual
                     AfterDownloadURL = Helpers.GetNodeChildValue(photos.Current, "after_download_url"),
 
                     AfterText = Helpers.GetNodeChildValue(photos.Current, "after_text"),
-                    AbsoluteUrl = photo.Current.GetAttribute("absolute_url", ""),
+                    AbsoluteUrl = photos.Current.GetAttribute("absolute_url", ""),
 
                     Tags = new List<string>(Helpers.GetNodeChildValue(photos.Current, "tags").Split(',')),
                     Variables = new Dictionary<string, string>()
