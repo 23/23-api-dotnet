@@ -28,6 +28,8 @@ namespace Visual
         private string _accessToken;
         private string _accessTokenSecret;
 
+        private bool _httpSecure;
+
         // * Constructor
 		/// <summary>
 		/// Creates a 23 API service repository, that relies only on public access to the API
@@ -48,7 +50,7 @@ namespace Visual
         /// <param name="consumerKey">Consumer key</param>
         /// <param name="consumerSecret">Consumer secret</param>
         public ApiProvider(string consumerDomain, string consumerKey, string consumerSecret)
-            : this(consumerDomain, consumerKey, consumerSecret, null, null)
+            : this(consumerDomain, consumerKey, consumerSecret, null, null, false)
         {
 
         }
@@ -61,13 +63,15 @@ namespace Visual
         /// <param name="consumerSecret">Consumer secret</param>
         /// <param name="accessToken">Access token</param>
         /// <param name="accessTokenSecret">Access token secret</param>
-        public ApiProvider(string consumerDomain, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret)
+        public ApiProvider(string consumerDomain, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, bool httpSecure)
         {
             // Save the authentication keys
             _consumerDomain = consumerDomain;
 
             _consumerKey = consumerKey;
             _consumerSecret = consumerSecret;
+
+            _httpSecure = httpSecure;
 
             // Open the OAuth consumer connection
             _oAuthProviderDescription.AccessTokenEndpoint = new MessageReceivingEndpoint("http://api.visualplatform.net/oauth/access_token", HttpDeliveryMethods.GetRequest);
@@ -164,7 +168,8 @@ namespace Visual
 
         public string GetRequestUrl(string method, List<string> parameters)
         {
-            return "http://" + _consumerDomain + method + (parameters != null ? (parameters.Count > 0 ? "?" + String.Join("&", parameters.ToArray()) : "") : "");
+            string protocol = _httpSecure ? "https://" : "http://";
+            return protocol + _consumerDomain + method + (parameters != null ? (parameters.Count > 0 ? "?" + String.Join("&", parameters.ToArray()) : "") : "");
         }
 
         public void SetProxy(string uri, string username = null, string password = null, string domain = null)
