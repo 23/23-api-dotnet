@@ -9,6 +9,8 @@ using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
 using System.Net;
+using Visual.Exceptions;
+using System.IO;
 
 namespace Visual
 {
@@ -124,6 +126,11 @@ namespace Visual
 				
 				// Get and parse the response
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new MalformedRequest(new StreamReader(response.GetResponseStream()).ReadToEnd());
+                }
 				
 				responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseStream(), new XmlReaderSettings()));
 			}
@@ -142,6 +149,11 @@ namespace Visual
 	            if (_proxy != null)
 	                request.Proxy = _proxy;
 	            IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
+
+                if (response.Status != HttpStatusCode.OK)
+                {
+                    throw new MalformedRequest(new StreamReader(response.ResponseStream).ReadToEnd());
+                }
 	
 				// Parse the response
 	            responseDocument = XDocument.Load(XmlReader.Create(response.GetResponseReader()));
@@ -151,14 +163,35 @@ namespace Visual
             XPathNavigator responseNavigation = responseDocument.CreateNavigator();
 
             XPathNodeIterator responseCheckIterator = responseNavigation.Select("/response");
-            if (responseCheckIterator.Count == 0) return null;
+            if (responseCheckIterator.Count == 0)
+            {
+                throw new MalformedRequest(responseDocument.ToString());
+            }
             while (responseCheckIterator.MoveNext())
             {
                 if (responseCheckIterator.Current == null) return null;
 
                 if (responseCheckIterator.Current.GetAttribute("status", "") != "ok")
                 {
-                    return null;
+                    string code = responseCheckIterator.Current.GetAttribute("code", "");
+                    string msg = responseCheckIterator.Current.GetAttribute("message", "");
+                    switch (code)
+                    {
+                        default:
+                            throw new MalformedRequest(msg);
+                            break;
+
+                        case "invalid_oauth_site":
+                        case "invalid_oauth_user":
+                        case "invalid_signature":
+                        case "token_required":
+                            throw new InvalidCredentials(msg);
+                            break;
+
+                        case "permission_denied":
+                            throw new PermissionDenied(msg);
+                            break;
+                    }
                 }
             }
 

@@ -78,6 +78,7 @@
     <Compile Include="Domain\Album.cs" />
     <Compile Include="Domain\Comment.cs" />
     <Compile Include="Domain\Session.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\InMemoryTokenManager.cs" />
     <Compile Include="Parameters\CommentList.cs" />
