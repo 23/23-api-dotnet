@@ -75,11 +75,13 @@ namespace Visual
 
             _httpSecure = httpSecure;
 
+            string protocol = httpSecure ? "https://" : "http://";
+
             // Open the OAuth consumer connection
-            _oAuthProviderDescription.AccessTokenEndpoint = new MessageReceivingEndpoint("http://api.visualplatform.net/oauth/access_token", HttpDeliveryMethods.GetRequest);
-            _oAuthProviderDescription.RequestTokenEndpoint = new MessageReceivingEndpoint("http://api.visualplatform.net/oauth/request_token", HttpDeliveryMethods.GetRequest);
+            _oAuthProviderDescription.AccessTokenEndpoint = new MessageReceivingEndpoint(protocol + "api.visualplatform.net/oauth/access_token", HttpDeliveryMethods.GetRequest);
+            _oAuthProviderDescription.RequestTokenEndpoint = new MessageReceivingEndpoint(protocol + "api.visualplatform.net/oauth/request_token", HttpDeliveryMethods.GetRequest);
             _oAuthProviderDescription.ProtocolVersion = ProtocolVersion.V10a;
-            _oAuthProviderDescription.UserAuthorizationEndpoint = new MessageReceivingEndpoint("http://api.visualplatform.net/oauth/authorize", HttpDeliveryMethods.GetRequest);
+            _oAuthProviderDescription.UserAuthorizationEndpoint = new MessageReceivingEndpoint(protocol + "api.visualplatform.net/oauth/authorize", HttpDeliveryMethods.GetRequest);
             _oAuthProviderDescription.TamperProtectionElements = new ITamperProtectionChannelBindingElement[] { new HmacSha1SigningBindingElement() };
 
             _oAuthTokenManager = new InMemoryTokenManager(_consumerKey, _consumerSecret);
@@ -148,7 +150,8 @@ namespace Visual
 	            HttpWebRequest request = (parameters == null ? _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken) : _oAuthConsumer.PrepareAuthorizedRequest(message, _accessToken, parameters));
 	            if (_proxy != null)
 	                request.Proxy = _proxy;
-	            IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
+
+                IncomingWebResponse response = _oAuthConsumer.Channel.WebRequestHandler.GetResponse(request);
 
                 if (response.Status != HttpStatusCode.OK)
                 {
