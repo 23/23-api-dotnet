@@ -14,12 +14,16 @@ namespace Visual
             _provider = provider;
         }
 
-        public Domain.Session GetToken(string returnUrl = "/")
+        public Domain.Session GetToken(string returnUrl = "/", string email = null, string fullname = null)
         {
             // Build request URL
             List<string> requestUrlParameters = new List<string>();
 
             requestUrlParameters.Add("return_url=" + HttpUtility.UrlEncode(returnUrl));
+            if (email != null)
+                requestUrlParameters.Add("email=" + HttpUtility.UrlEncode(email));
+            if (fullname != null)
+                requestUrlParameters.Add("full_name=" + HttpUtility.UrlEncode(fullname));
 
             // Do the request
             MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/session/get-token", requestUrlParameters), HttpDeliveryMethods.GetRequest);
@@ -46,7 +50,6 @@ namespace Visual
             List<string> returnUrlParameters = new List<string>();
 
             returnUrlParameters.Add("session_token=" + result.AccessToken);
-            returnUrlParameters.Add("return_url=" + localReturnUrl);
 
             result.ReturnURL = _provider.GetRequestUrl("/api/session/redeem-token", returnUrlParameters);
 

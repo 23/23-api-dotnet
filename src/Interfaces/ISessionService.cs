@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="returnUrl">Specific (http://example.23video.com/...) or relative path (/...) on site</param>
         /// <returns>A Session object</returns>
-        Domain.Session GetToken(string returnUrl = "/");
+        Domain.Session GetToken(string returnUrl = "/", string email = null, string fullname = null);
     }
 }
