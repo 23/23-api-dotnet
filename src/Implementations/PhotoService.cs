@@ -142,14 +142,20 @@ namespace Visual
         }
 
         // * Get a single photo
-        public Domain.Photo Get(int photoId, bool includeUnpublished = false)
+        public Domain.Photo Get(int photoId, bool includeUnpublished = false, string token = null)
         {
-            // Get a list of photos
-            List<Domain.Photo> photoList = GetList(new PhotoListParameters
+            // Parameters
+            PhotoListParameters parameters = new PhotoListParameters
             {
                 PhotoId = photoId,
                 IncludeUnpublished = includeUnpublished
-            });
+            };
+            if (!string.IsNullOrEmpty(token))
+            {
+                parameters.Token = token;
+            }
+            // Get a list of photos
+            List<Domain.Photo> photoList = GetList(parameters);
 
             // Verify photo list
             if ((photoList == null) || (photoList.Count == 0)) return null;

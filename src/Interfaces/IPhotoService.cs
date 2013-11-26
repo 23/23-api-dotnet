@@ -17,7 +17,10 @@ namespace Visual
 		/// <param name="includeUnpublished">
 		/// Include or exclude published videos from the result
 		/// </param>
-        Domain.Photo Get(int photoId, bool includeUnpublished = false);
+        /// <param name="token">
+        /// The token for the photo (in the case of hidden photos)
+        /// </param>
+        Domain.Photo Get(int photoId, bool includeUnpublished = false, string token = null);
 		
 		/// <summary>
 		/// Gets a list of photos
