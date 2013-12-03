@@ -4,6 +4,7 @@ using System.Web;
 using System.Xml.XPath;
 using System.Linq;
 using DotNetOpenAuth.Messaging;
+using Visual.Exceptions;
 
 namespace Visual
 {
@@ -416,7 +417,7 @@ namespace Visual
 
         // * Upload photo
         // Implements http://www.23developer.com/api/photo-upload
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null)
+        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null, Dictionary<string,string> variables = null)
         {
             // Verify required parameters
             if (filestream == null) return null;
@@ -437,6 +438,21 @@ namespace Visual
             if (description != null) data.Add(MultipartPostPart.CreateFormPart("description", description));
             if (tags != null) data.Add(MultipartPostPart.CreateFormPart("tags", tags));
             if (publish != null) data.Add(MultipartPostPart.CreateFormPart("publish", publish.Value ? "1" : "0"));
+            if (variables != null)
+            {
+                foreach (KeyValuePair<string, string> entry in variables)
+                {
+                    // Can't overwrite default values using this!
+                    if (!_defaultAttributes.Contains(entry.Key))
+                    {
+                        data.Add(MultipartPostPart.CreateFormPart(entry.Key, entry.Value));
+                    }
+                    else
+                    {
+                        throw new MalformedRequest("Cannot set built-in field '" + entry.Key + "' through custom variables.");
+                    }
+                }
+            }
 
             // Do the request
             MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/photo/upload", null), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest);
@@ -510,7 +526,7 @@ namespace Visual
         // * Update photo
         // Implements
         /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null)
+        public bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null, Dictionary<string,string> variables = null)
         {
             // Build request URL
             List<MultipartPostPart> data = new List<MultipartPostPart>
@@ -523,6 +539,21 @@ namespace Visual
             if (description != null) data.Add(MultipartPostPart.CreateFormPart("description", description));
             if (tags != null) data.Add(MultipartPostPart.CreateFormPart("tags", tags));
             if (published != null) data.Add(MultipartPostPart.CreateFormPart("publish", published.Value ? "1" : "0"));
+            if (variables != null)
+            {
+                foreach (KeyValuePair<string,string> entry in variables)
+                {
+                    // Can't overwrite default values using this!
+                    if (!_defaultAttributes.Contains(entry.Key))
+                    {
+                        data.Add(MultipartPostPart.CreateFormPart(entry.Key, entry.Value));
+                    }
+                    else
+                    {
+                        throw new MalformedRequest("Cannot set built-in field '" + entry.Key + "' through custom variables.");
+                    }
+                }
+            }
 
             // Do the request
             MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/photo/update", null), HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest);

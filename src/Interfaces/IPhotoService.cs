@@ -71,7 +71,7 @@ namespace Visual
 		/// <param name="publish">
 		/// Publish after uploading
 		/// </param>
-        int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null);
+        int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null, Dictionary<string,string> variables = null);
 		
 		/// <summary>
 		/// Delete the specified photo
@@ -119,7 +119,7 @@ namespace Visual
 		/// <param name="published">
 		/// Published
 		/// </param>
-        bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null);
+        bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null, Dictionary<string,string> variables = null);
 		
         Domain.PhotoUploadToken GetUploadToken(string returnUrl, bool? backgroundReturn, int? userId, int? albumId, string title, string description, string tags, bool? publish, int? validMinutes, int? maxUploads);
         bool RedeemUploadToken(string filename, string fileContentType, System.IO.Stream filestream, string uploadToken);
