@@ -11,6 +11,7 @@ using DotNetOpenAuth.OAuth.Messages;
 using System.Net;
 using Visual.Exceptions;
 using System.IO;
+using Visual.Utilities;
 
 namespace Visual
 {
@@ -76,6 +77,9 @@ namespace Visual
             _httpSecure = httpSecure;
 
             string protocol = httpSecure ? "https://" : "http://";
+
+            // Adjust timeout for requests to the domain to allow for large file uploads
+            WebRequest.RegisterPrefix(protocol + _consumerDomain, TwentyThreeCreatorRequestCreator.TwentyThreeHttp);
 
             // Open the OAuth consumer connection
             _oAuthProviderDescription.AccessTokenEndpoint = new MessageReceivingEndpoint(protocol + "api.visualplatform.net/oauth/access_token", HttpDeliveryMethods.GetRequest);
