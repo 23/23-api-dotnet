@@ -79,6 +79,7 @@
     <Compile Include="Domain\Comment.cs" />
     <Compile Include="Domain\Session.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Utilities\TwentyThreeCreatorRequestCreator.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\InMemoryTokenManager.cs" />
     <Compile Include="Parameters\CommentList.cs" />
@@ -91,7 +92,6 @@
   <ItemGroup>
     <None Include="23API.snk" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

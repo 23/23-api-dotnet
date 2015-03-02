@@ -241,6 +241,9 @@ namespace Visual
                     Token = photos.Current.GetAttribute("token", ""),
                     One = photos.Current.GetAttribute("one", ""),
 
+                    AlbumId = Helpers.ConvertStringToInteger(photos.Current.GetAttribute("album_id", "")),
+                    AlbumTitle = photos.Current.GetAttribute("album_title", ""),
+
                     Published = (photos.Current.GetAttribute("published_p", "") == "1"),
 
                     CreationDateANSI = photos.Current.GetAttribute("creation_date_ansi", ""),

@@ -53,6 +53,9 @@ namespace Visual.Domain
         public string Token;
         public string One;
 
+        public int? AlbumId;
+        public string AlbumTitle;
+
         public bool? Published;
 
         public string CreationDateANSI;
