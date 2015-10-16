@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Xml.XPath;
 using DotNetOpenAuth.Messaging;
+using Visual.Exceptions;
 
 namespace Visual
 {
@@ -162,6 +163,59 @@ namespace Visual
 
             // Return the object
             return result;
+        }
+
+        public bool? Update(int userId, string email = null, string username = null, string password = null, string fullName = null, Timezone? timezone = null, bool siteAdmin = false)
+        {
+            // Verify required parameters
+            if (userId <= 0) return null;
+
+            // Build request URL
+            List<string> requestUrlParameters = new List<string>();
+
+            requestUrlParameters.Add("user_id=" + userId.ToString());
+            if (!String.IsNullOrEmpty(username)) requestUrlParameters.Add("username=" + HttpUtility.UrlEncode(username));
+            if (!String.IsNullOrEmpty(password)) requestUrlParameters.Add("password=" + HttpUtility.UrlEncode(password));
+            if (!String.IsNullOrEmpty(fullName)) requestUrlParameters.Add("full_name=" + HttpUtility.UrlEncode(fullName));
+            if (timezone != null) requestUrlParameters.Add("timezone=" + HttpUtility.UrlEncode(RequestValues.Get(timezone)));
+            if (siteAdmin) requestUrlParameters.Add("site_admin=1");
+
+            // Do the request
+            MessageReceivingEndpoint requestMessage = new MessageReceivingEndpoint(_provider.GetRequestUrl("/api/user/update", requestUrlParameters), HttpDeliveryMethods.GetRequest);
+
+            XPathNavigator responseMessage = _provider.DoRequest(requestMessage);
+            if (responseMessage == null) return null;
+
+            // Get the User id
+            XPathNodeIterator response = responseMessage.Select("/response");
+            if ((response.MoveNext()) && (response.Current != null))
+            {
+                string status = response.Current.GetAttribute("status", "");
+                if (status.Equals("ok", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+                else
+                {
+                    string key = response.Current.GetAttribute("code", "");
+                    string message = response.Current.GetAttribute("message", "");
+                    switch (key)
+                    {
+                        case "permission_denied":
+                            throw new PermissionDenied(message);
+
+                        case "no_such_user":
+                        case "invalid_username":
+                            throw new MalformedRequest(message);
+
+                        default:
+                            throw new FailedRequest(message);
+                    }
+                }
+            }
+
+            // If nothing pops up, we'll return null
+            return null;
         }
     }
 }

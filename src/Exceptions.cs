@@ -28,4 +28,12 @@ namespace Visual.Exceptions
         public MalformedRequest(string message, System.Exception inner) : base(message, inner) { }
         protected MalformedRequest(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
+
+    public class FailedRequest : ApplicationException
+    {
+        public FailedRequest() : base() { }
+        public FailedRequest(string message) : base(message) { }
+        public FailedRequest(string message, System.Exception inner) : base(message, inner) { }
+        protected FailedRequest(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
 }

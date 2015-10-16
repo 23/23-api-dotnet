@@ -70,5 +70,34 @@ namespace Visual
 		/// URL where the user should be redirected to after login has succeeded
 		/// </param>
         Domain.Session GetLoginToken(int userId, string returnUrl = "/");
+
+        /// <summary>
+        /// Update a user with the given information
+        /// </summary>
+        /// <returns>
+        /// True upon success, null on failure
+        /// </returns>
+        /// <param name='email'>
+        /// E-mail address
+        /// </param>
+        /// <param name='username'>
+        /// Username
+        /// </param>
+        /// <param name='password'>
+        /// Password
+        /// </param>
+        /// <param name='fullName'>
+        /// Full name
+        /// </param>
+        /// <param name='timezone'>
+        /// Timezone of the user
+        /// </param>
+        /// <param name='siteAdmin'>
+        /// Is the user an administrator?
+        /// </param>
+        /// <throws>
+        /// PermissionDenied exception
+        /// </throws>
+        bool? Update(int userId, string email = null, string username = null, string password = null, string fullName = null, Timezone? timezone = null, bool siteAdmin = false);
     }
 }

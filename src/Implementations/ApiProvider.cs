@@ -186,18 +186,15 @@ namespace Visual
                     {
                         default:
                             throw new MalformedRequest(msg);
-                            break;
 
                         case "invalid_oauth_site":
                         case "invalid_oauth_user":
                         case "invalid_signature":
                         case "token_required":
                             throw new InvalidCredentials(msg);
-                            break;
 
                         case "permission_denied":
                             throw new PermissionDenied(msg);
-                            break;
                     }
                 }
             }
