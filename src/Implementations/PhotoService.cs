@@ -420,13 +420,13 @@ namespace Visual
 
                 result.Add(photoModel);
             }
-
+            
             return result;
         }
 
         // * Upload photo
         // Implements http://www.23developer.com/api/photo-upload
-        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null, Dictionary<string, string> variables = null)
+        public int? Upload(string filename, string fileContentType, System.IO.Stream filestream, int? userId = null, int? albumId = null, string title = null, string description = null, string tags = null, bool? publish = null, Dictionary<string,string> variables = null)
         {
             // Verify required parameters
             if (filestream == null) return null;
@@ -472,7 +472,7 @@ namespace Visual
             // Get the Photo id
             XPathNodeIterator photos = responseMessage.Select("/response/photo_id");
             if ((photos.MoveNext()) && (photos.Current != null)) return Helpers.ConvertStringToInteger(photos.Current.Value);
-
+            
             // If nothing pops up, we'll return null
             return null;
         }
@@ -535,7 +535,7 @@ namespace Visual
         // * Update photo
         // Implements
         /// <summary>Update a photo given the id</summary>
-        public bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null, Dictionary<string, string> variables = null)
+        public bool Update(int photoId, int? albumId = null, string title = null, string description = null, string tags = null, bool? published = null, Dictionary<string,string> variables = null)
         {
             // Build request URL
             List<MultipartPostPart> data = new List<MultipartPostPart>
@@ -550,7 +550,7 @@ namespace Visual
             if (published != null) data.Add(MultipartPostPart.CreateFormPart("publish", published.Value ? "1" : "0"));
             if (variables != null)
             {
-                foreach (KeyValuePair<string, string> entry in variables)
+                foreach (KeyValuePair<string,string> entry in variables)
                 {
                     // Can't overwrite default values using this!
                     if (!_defaultAttributes.Contains(entry.Key))
@@ -587,7 +587,7 @@ namespace Visual
             };
 
             if (backgroundReturn != null) data.Add(MultipartPostPart.CreateFormPart("background_return_p", backgroundReturn.Value ? "1" : "0"));
-
+            
             if (userId != null) data.Add(MultipartPostPart.CreateFormPart("user_id", userId.ToString()));
             if (albumId != null) data.Add(MultipartPostPart.CreateFormPart("album_id", albumId.ToString()));
             if (title != null) data.Add(MultipartPostPart.CreateFormPart("title", title));
@@ -655,7 +655,7 @@ namespace Visual
 
             XPathNavigator responseMessage = _provider.DoRequest(requestMessage, data);
             if (responseMessage == null) return false;
-
+            
             // If nothing pops up, we'll return null
             return true;
         }
