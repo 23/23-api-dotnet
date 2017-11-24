@@ -101,6 +101,7 @@ namespace Visual.Domain
         public PhotoBlock VideoSmall;
         public PhotoBlock VideoMedium;
         public PhotoBlock VideoHD;
+        public PhotoBlock Video1080p;
         public PhotoBlock VideoMobileH263AMR;
         public PhotoBlock VideoMobileH263AAC;
         public PhotoBlock VideoMobileMPEGE4AMR;
@@ -115,7 +116,7 @@ namespace Visual.Domain
         public string AfterDownloadURL;
 
         public string AfterText;
-        
+
         public string AbsoluteUrl;
 
         public List<string> Tags;
