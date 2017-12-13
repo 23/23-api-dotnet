@@ -234,7 +234,7 @@ namespace Visual
             {
                 // Create the domain Photo
                 Domain.Photo photoModel = new Domain.Photo
-                                              {
+                {
                     PhotoId = Helpers.ConvertStringToInteger(photos.Current.GetAttribute("photo_id", "")),
 
                     Title = photos.Current.GetAttribute("title", ""),
@@ -354,6 +354,12 @@ namespace Visual
                         photos.Current.GetAttribute("video_hd_height", ""),
                         photos.Current.GetAttribute("video_hd_size", ""),
                         photos.Current.GetAttribute("video_hd_download", "")
+                    ),
+                    Video1080p = new Domain.PhotoBlock(
+                        photos.Current.GetAttribute("video_1080p_width", ""),
+                        photos.Current.GetAttribute("video_1080p_height", ""),
+                        photos.Current.GetAttribute("video_1080p_size", ""),
+                        photos.Current.GetAttribute("video_1080p_download", "")
                     ),
                     VideoMobileH263AMR = new Domain.PhotoBlock(
                         photos.Current.GetAttribute("video_mobile_h263_amr_width", ""),
