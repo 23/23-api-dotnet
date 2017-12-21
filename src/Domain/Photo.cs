@@ -77,6 +77,7 @@ namespace Visual.Domain
         public bool? IsAudio;
         public bool? VideoEncoded;
         public bool? TextOnly;
+        public bool? Promoted;
 
         public double? VideoLength;
 
