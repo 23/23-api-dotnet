@@ -16,6 +16,7 @@ namespace Visual
 "title",
 "tree_id",
 "token",
+"promoted_p",
 "album_id",
 "album_title",
 "all_albums",
@@ -199,6 +200,8 @@ namespace Visual
             if (requestParameters.Audio != null) requestUrlParameters.Add("audio_p=" + (requestParameters.Audio.Value ? "1" : "0"));
             if (requestParameters.VideoEncoded != null) requestUrlParameters.Add("video_encoded_p=" + (requestParameters.VideoEncoded.Value ? "1" : "0"));
 
+            requestUrlParameters.Add("prioritize_promoted_p="+(requestParameters.PrioritizePromoted ? "1": "0"));
+
             requestUrlParameters.Add("include_unpublished_p=" + (requestParameters.IncludeUnpublished ? "1" : "0"));
 
             if (requestParameters.Tags.Count > 0)
@@ -245,6 +248,7 @@ namespace Visual
                     AlbumTitle = photos.Current.GetAttribute("album_title", ""),
 
                     Published = (photos.Current.GetAttribute("published_p", "") == "1"),
+                    Promoted = (photos.Current.GetAttribute("promoted_p", "") == "1"),
 
                     CreationDateANSI = photos.Current.GetAttribute("creation_date_ansi", ""),
                     CreationDateDate = photos.Current.GetAttribute("creation_date__date", ""),

@@ -158,7 +158,12 @@ namespace Visual
 		/// Include unpublished photos
 		/// </summary>
         public bool IncludeUnpublished = false;
-		
+
+        /// <summary>
+        /// Prioritize promoted videos
+        /// </summary>
+		public bool PrioritizePromoted = true;
+
 		/// <summary>
 		/// Property to order the photo list by
 		/// </summary>
